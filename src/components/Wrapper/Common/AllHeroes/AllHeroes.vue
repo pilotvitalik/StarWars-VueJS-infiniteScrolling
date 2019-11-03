@@ -149,7 +149,12 @@ export default {
      //----------------------------------------------------------------------------
      //-----------------Start animation loading page with InfiniteScrolling--------
      bus.$on('animationLoadingPage', data => {
-      this.showLoadPage = true
+      if(this.isCreateSearch == true){
+        this.showLoadPage = false
+      }else{
+        this.showLoadPage = true
+      }
+      
      })
      //-----------------------------------------------------------------------------
      //--------------Stop animation loading page with InfiniteScrolling------------

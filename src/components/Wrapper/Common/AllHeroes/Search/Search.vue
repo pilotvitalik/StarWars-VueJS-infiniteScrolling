@@ -38,6 +38,8 @@ export default {
       this.isActive = false;
       this.isDisplay = true;
       this.isClose = false;
+      this.searchTxt = '';
+      bus.$emit('search', false);
     }
   },
   created(){

@@ -192,12 +192,31 @@ export default{
 		bus.$on('currentPage', data => {
 			this.page = data;
 			this.common(data)
+			console.log(this.page)
 		});
 		let com = [];
 		bus.$on('result', (data) => {
 			com.push(data)
 			this.peoples = com;
+			console.log(this.peoples)
 		})
+	},
+	beforeMounte(){
+		console.log('beforeMounte')
+	},
+	mounted(){
+		console.log('Mounted')
+	},
+	beforeUpdate(){
+		console.log('beforeUpdate')
+	},
+	updated(){
+		console.log('updated')
+	},
+	beforeDestroy(){
+		bus.$off('result');
+		bus.$off('currentPage');
+		console.log('beforeDestroy')
 	},
 }
 </script>
@@ -260,7 +279,7 @@ export default{
 				}
 			}
 			&>li:hover{
-				box-shadow: 0 10px 40px rgba(37, 136, 167, 0.38);
+				cursor: pointer;
 			}
 		}
 	}

@@ -1,10 +1,9 @@
-
 <template>
 	<ul id='SearchCarts' :class="{display: !isShow}">
 		<li v-for='people in peoples' :key='people.name' @click = 'descript(people)'>
 		  <span :class="{display: isNewPage}">{{people.name}}</span>
 		  <ul :class="{display: isNewPage}">
-			<li>{{people.image}}</li>
+			<li><img :src="people.image"></li>
 			<li>{{people.specie}}</li>
 		  </ul>
 		</li>
@@ -22,6 +21,7 @@ export default{
 			isPage: false,
 			status: [],
 			isNewPage: false,
+			valForPages: '',
 		}
 	},
 	methods: {
@@ -166,14 +166,18 @@ export default{
 			}
 		},
 	},
-	beforeCreate(){
-		console.log('beforeCreate')
-	},
 	created(){
+		bus.$on('isCreatedSearchPages', data => {
+			if(data == true){
+				setTimeout(() => {
+					bus.$emit('valForPages', this.valForPages)
+				}, 1)
+			}
+		})
 		let time = new Date();
-		console.log('Created')
 				bus.$on('val',  (data) => {
 					this.$nextTick(function() {
+						this.valForPages = data
 						this.firstPage(data);
 					});
 				});
@@ -246,7 +250,75 @@ export default{
 };
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
+#SearchCarts{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	position: relative;
+	width: 100%;
+	height: auto;
+	&>li{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		position: relative;
+		width: 592*100/1216%;
+		height: 320px;
+		margin-bottom: 32px;
+		border-radius: 8px;
+		background: #1a1a1a;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+		span{
+			display: inline-block;
+			position: absolute;
+			height: 21px;
+			top: 183px;
+			color: #fff;
+			font-family: 'Roboto', sans-serif;
+			font-weight: bold;
+			font-size: 18px;
+			line-height: 21px;
+		}
+		ul{
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+			position: relative;
+			width: 95px;
+			height: 135px;
+			top: 93px;
+			li:first-child{
+				display: block;
+				position: relative;
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				img{
+					display: block;
+					position: relative;
+					width: 100%;
+					height: 100%;
+					border-radius: inherit;
+					background: pink;
+				}
+			}
+			li:last-child{
+				display: inline-block;
+				position: relative;
+				width: 100%;
+				height: 15px;
+				color: #808080;
+				font-family: 'Roboto', sans-serif;
+				font-size: 13px;
+				line-height: 15px;
+				text-align: center;
+			}
+		}
+	}
+}
 .display{
 display: none !important;
 }

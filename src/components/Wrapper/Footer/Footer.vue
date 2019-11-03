@@ -1,6 +1,7 @@
 <template>
 	<footer id='footer'>
-		<h3 class='left' ref='infinityScroll' :class="{display: !isShow}">STAR WARS CHARACTER Encyclopedia, 2019</h3>
+		<h3 class='left'>STAR WARS CHARACTER Encyclopedia, 2019</h3>
+		<div ref='infinityScroll'></div>
 	</footer>
 </template>
 
@@ -10,9 +11,9 @@ import {bus} from '../../../main'
 export default {
   data() {
     return {
-    	isShow: false,
     	counter: 1,
     	allPages: '',
+    	isCreatedSearch: false,
     };
   },
   methods: {
@@ -23,8 +24,7 @@ export default {
   						this.counter++;
   						if(this.counter <= this.allPages){
   							bus.$emit('currentPage', this.counter)
-  							bus.$emit('animationLoadingPage', true)
-  						}
+  								bus.$emit('animationLoadingPage', true)  						}
   					}
   			})
   		})
@@ -32,12 +32,13 @@ export default {
   	}
   },
   created(){
-  	bus.$on('showPages', data => {
-  		this.isShow = data
-  	});
   	bus.$on('numberPage', data => {
   		this.allPages = Math.ceil(data/10)
   	});
+  	bus.$on('created', (data) => {
+  		console.log(data)
+  		this.isCreatedSearch = data;
+  	})
   },
   mounted(){
   	this.scrollInfinite();
@@ -47,9 +48,6 @@ export default {
 
 
 <style lang='less' scoped>
-.display{
-	display: none;
-}
 #footer{
 	display: flex;
 	flex-direction: column;
@@ -66,6 +64,11 @@ export default {
 		font-family: 'Roboto',sans-serif;
 		font-weight: bold;
 		text-transform: uppercase;
+	}
+	div{
+		display: block;
+		position: relative;
+		height: 0.1px;
 	}
 }
 @media(min-width: 768px){

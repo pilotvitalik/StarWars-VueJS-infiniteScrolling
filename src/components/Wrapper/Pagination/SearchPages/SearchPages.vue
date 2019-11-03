@@ -32,6 +32,7 @@ export default {
     },
   },
   created() {
+    bus.$emit('isCreatedSearchPages', true)
     bus.$on('searchPages', (data) => { // eslint-disable-next-line
       const tmpPages = Math.round(data / 10);
       const tmpArr = [];
@@ -43,7 +44,7 @@ export default {
       } else {
         this.isOnePage = true;
       }
-      bus.$emit('counter', tmpArr);
+      bus.$emit('counterPages', tmpArr);
     });
     bus.$on('iShow', (data) => {
       this.isShow = data;
@@ -51,10 +52,12 @@ export default {
     bus.$on('search', (data) => {
       this.isShow = !data;
     }); // eslint-disable-next-line
-    bus.$on('val', (data) => {
+    bus.$on('valForPages', (data) => {
+      console.log(data)
       this.value = data;
       const str = data;
-      bus.$on('counter', (dat) => { // eslint-disable-next-line
+      bus.$on('counterPages', (dat) => { // eslint-disable-next-line
+        console.log(dat)
         this.pages = dat.map(item => {
           return {
             result: str,
@@ -66,7 +69,7 @@ export default {
   },
   beforeDestroy() {
     bus.$off('searchPages');
-    bus.$off('val');
+    bus.$off('valForPages');
     bus.$off('newValue');
   },
 };
@@ -75,5 +78,75 @@ export default {
 <style lang='less'>
 .display{
 display: none !important;
+}
+#searchPages{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    margin: 0 auto;
+    button{
+      display: inline-block;
+      position: relative;
+      border: none;
+      background: #808080;
+      outline: none;
+      text-align: center;
+      color: #565656;
+      font-family: 'Roboto', sans-serif;
+    }
+    .active,
+    button:hover{
+        cursor: pointer;
+        color: #fff;
+        text-shadow: 0 0 20px rgb(255,224,27), 
+                     0 0 20px rgb(255,224,27),
+                     0 0 20px rgb(255,224,27),
+                     0 0 20px rgb(255,224,27),
+                     0 0 20px rgb(255,224,27);
+    }
+  }
+@media(min-width: 768px){
+    #searchPages{
+      width: 500px;
+      height: 60px;
+      button{
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        box-shadow: inset 0 5px 10px rgba(0,0,0,0.1), 0 2px 5px rgba(0,0,0,0.5);
+        font-size: 20px;
+        line-height: 40px;
+      }
+    }
+}
+@media(min-width: 550px) and (max-width: 767px){
+    #searchPages{
+      width: 500px;
+      height: 60px;
+      button{
+        width: 36px;
+        height: 36px;
+        border-radius: 4px;
+        box-shadow: inset 0 5px 10px rgba(0,0,0,0.1), 0 2px 5px rgba(0,0,0,0.5);
+        font-size: 18px;
+        line-height: 36px;
+      }
+    }
+}
+@media(min-width: 320px) and (max-width: 549px){
+    #searchPages{
+      width: 100%;
+      height: 60px;
+      button{
+        width: 25px;
+        height: 25px;
+        border-radius: 4px;
+        box-shadow: inset 0 5px 10px rgba(0,0,0,0.1), 0 2px 5px rgba(0,0,0,0.5);
+        font-size: 18px;
+        line-height: 25px;
+      }
+    }
 }
 </style>
